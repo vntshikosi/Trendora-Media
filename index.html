@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trendora Media | Service Selector</title>
+    <style>
+        :root {
+            /* Colors pulled from your Logo */
+            --bg-dark: #0f1420;  /* Very dark navy */
+            --bg-card: #1a2639;  /* Slightly lighter navy */
+            --accent: #4a90e2;   /* The blue swirl color */
+            --silver: #e0e6ed;   /* Text color */
+            --white: #ffffff;
+            --success: #2ecc71;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            background-color: var(--bg-dark);
+            color: var(--silver);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 5%;
+            background: rgba(15, 20, 32, 0.95);
+            border-bottom: 1px solid #2c3e50;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        /* Make sure your logo filename matches this in the HTML below */
+        .logo-img {
+            height: 50px; 
+            width: auto;
+        }
+
+        .brand-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--white);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 4rem 20px;
+            background: radial-gradient(circle at center, #233550 0%, var(--bg-dark) 70%);
+        }
+        
+        .hero h1 { font-size: 2.5rem; color: var(--white); margin-bottom: 10px; }
+        .hero p { max-width: 600px; margin: 0 auto; color: #a0aab5; }
+
+        /* Service Grid */
+        .container { max-width: 1200px; margin: 0 auto; padding: 2rem 20px; }
+        
+        .section-title { text-align: center; margin-bottom: 3rem; color: var(--accent); }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        /* Service Cards */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid #2c3e50;
+            border-radius: 12px;
+            padding: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            border-color: var(--accent);
+        }
+
+        /* Selected State for Cards */
+        .card.selected {
+            border: 2px solid var(--accent);
+            background: #1e2f46;
+        }
+
+        .card.selected::after {
+            content: "✓ Selected";
+            position: absolute;
+            top: -10px;
+            right: 20px;
+            background: var(--accent);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .price {
+            font-size: 1.8rem;
+            color: var(--white);
+            font-weight: bold;
+            margin: 15px 0;
+        }
+
+        .price span { font-size: 1rem; color: #888; font-weight: normal; }
+
+        /* Summary Bar (Sticky Bottom) */
+        .summary-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #1a2639;
+            border-top: 1px solid var(--accent);
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
+            z-index: 2000;
+            transform: translateY(100%); /* Hidden by default */
+            transition: transform 0.3s ease-in-out;
+            box-sizing: border-box;
+        }
+
+        .summary-bar.active { transform: translateY(0); }
+
+        .total-display { font-size: 1.2rem; }
+        .total-amount { font-weight: bold; color: var(--accent); font-size: 1.5rem; }
+
+        .btn-request {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-request:hover { background: #357abd; }
+
+        /* Client Info Modal/Form Area (Simple version) */
+        .instructions {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #888;
+        }
+
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo-container">
+            <img src="Company logo for a company named Trendora Media.jpg" alt="Trendora Logo" class="logo-img">
+            <span class="brand-name">Trendora Media</span>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <h1>Build. Market. Create.</h1>
+        <p>Select the services you need below to generate a custom quote request.</p>
+    </header>
+
+    <div class="container">
+        <h2 class="section-title">Our Services</h2>
+        
+        <div class="grid">
+            <div class="card" onclick="toggleService(this, 1500, 'Standard Website Build')">
+                <h3>Standard Website</h3>
+                <p>5-page responsive website, SEO ready, contact forms included.</p>
+                <div class="price">$1,500 <span>/ project</span></div>
+            </div>
+
+            <div class="card" onclick="toggleService(this, 2500, 'E-Commerce Website')">
+                <h3>E-Commerce Store</h3>
+                <p>Full online store, payment integration, product setup.</p>
+                <div class="price">$2,500 <span>/ project</span></div>
+            </div>
+
+            <div class="card" onclick="toggleService(this, 200, 'Website Maintenance')">
+                <h3>Web Maintenance</h3>
+                <p>Monthly updates, security checks, and minor content edits.</p>
+                <div class="price">$200 <span>/ month</span></div>
+            </div>
+
+            <div class="card" onclick="toggleService(this, 800, 'Social Media Marketing')">
+                <h3>Social Media Mgmt</h3>
+                <p>12 posts/month, community engagement, monthly report.</p>
+                <div class="price">$800 <span>/ month</span></div>
+            </div>
+
+            <div class="card" onclick="toggleService(this, 1200, 'Paid Ads Campaign')">
+                <h3>Paid Ad Campaign</h3>
+                <p>Google or Meta ads setup, A/B testing, and optimization.</p>
+                <div class="price">$1,200 <span>/ month</span></div>
+            </div>
+
+            <div class="card" onclick="toggleService(this, 400, 'Photography Session')">
+                <h3>Photography</h3>
+                <p>2-hour brand or product photoshoot + professional editing.</p>
+                <div class="price">$400 <span>/ session</span></div>
+            </div>
+
+            <div class="card" onclick="toggleService(this, 300, 'Video Editing')">
+                <h3>Video Editing</h3>
+                <p>Professional cutting, color grading, and sound design (per min).</p>
+                <div class="price">$300 <span>/ video</span></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="summary-bar" id="summaryBar">
+        <div class="total-display">
+            Estimated Total: <span class="total-amount" id="totalPrice">$0</span>
+        </div>
+        <button class="btn-request" onclick="sendRequest()">Proceed to Request</button>
+    </div>
+
+    <script>
+        let total = 0;
+        let selectedServices = [];
+
+        function toggleService(cardElement, price, name) {
+            // Toggle Visuals
+            cardElement.classList.toggle('selected');
+
+            // Check if selected or deselected
+            if (cardElement.classList.contains('selected')) {
+                // Add to total
+                total += price;
+                selectedServices.push(name);
+            } else {
+                // Subtract from total
+                total -= price;
+                // Remove from array
+                const index = selectedServices.indexOf(name);
+                if (index > -1) {
+                    selectedServices.splice(index, 1);
+                }
+            }
+
+            // Update UI
+            document.getElementById('totalPrice').innerText = '$' + total.toLocaleString();
+            
+            // Show/Hide Bottom Bar
+            const bar = document.getElementById('summaryBar');
+            if (total > 0) {
+                bar.classList.add('active');
+            } else {
+                bar.classList.remove('active');
+            }
+        }
+
+        function sendRequest() {
+            if(selectedServices.length === 0) return;
+
+            // 1. Get client details (Simple prompt for now)
+            let clientName = prompt("Please enter your Name/Company Name:");
+            
+            if (clientName) {
+                // 2. Format the email body
+                const subject = encodeURIComponent(`Service Request from ${clientName}`);
+                
+                const bodyContent = `Hi Trendora Media,\n\nI am interested in the following services:\n\n` + 
+                                    selectedServices.map(s => `- ${s}`).join('\n') + 
+                                    `\n\nEstimated Budget: $${total.toLocaleString()}\n\n` +
+                                    `Please contact me to discuss details.\n\nBest,\n${clientName}`;
+                
+                const body = encodeURIComponent(bodyContent);
+
+                // 3. Your Email Address Here
+                const myEmail = "your.email@example.com"; 
+
+                // 4. Open Email Client
+                window.location.href = `mailto:${myEmail}?subject=${subject}&body=${body}`;
+            }
+        }
+    </script>
+
+</body>
+</html>
