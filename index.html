@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trendora Media | Service Selector</title>
     <style>
-        /* --- CSS STYLES START HERE --- */
+        /* --- CSS STYLES --- */
         :root {
             --bg-dark: #0f1420;
             --bg-card: #1a2639;
@@ -22,7 +22,6 @@
             line-height: 1.6;
         }
 
-        /* Navigation */
         nav {
             display: flex;
             align-items: center;
@@ -33,16 +32,9 @@
         }
 
         .logo-container { display: flex; align-items: center; gap: 15px; }
-        
-        /* Logo sizing */
         .logo-img { height: 50px; width: auto; display: block; }
-        
-        .brand-name { 
-            font-size: 1.5rem; font-weight: 700; 
-            color: var(--white); text-transform: uppercase; 
-        }
+        .brand-name { font-size: 1.5rem; font-weight: 700; color: var(--white); text-transform: uppercase; }
 
-        /* Hero Section */
         .hero {
             text-align: center;
             padding: 4rem 20px;
@@ -50,7 +42,6 @@
         }
         .hero h1 { font-size: 2.5rem; color: var(--white); margin-bottom: 10px; }
 
-        /* Grid Layout */
         .container { max-width: 1200px; margin: 0 auto; padding: 2rem 20px; }
         .section-title { text-align: center; margin-bottom: 3rem; color: var(--accent); }
 
@@ -60,7 +51,6 @@
             gap: 25px;
         }
 
-        /* Cards */
         .card {
             background: var(--bg-card);
             border: 1px solid #2c3e50;
@@ -72,8 +62,6 @@
         }
 
         .card:hover { transform: translateY(-5px); border-color: var(--accent); }
-
-        /* Selected State */
         .card.selected { border: 2px solid var(--accent); background: #1e2f46; }
         .card.selected::after {
             content: "✓ Selected";
@@ -85,7 +73,6 @@
         .price { font-size: 1.8rem; color: var(--white); font-weight: bold; margin: 15px 0; }
         .price span { font-size: 1rem; color: #888; font-weight: normal; }
 
-        /* Bottom Bar */
         .summary-bar {
             position: fixed; bottom: 0; left: 0; width: 100%;
             background: #1a2639; border-top: 1px solid var(--accent);
@@ -115,49 +102,50 @@
     <header class="hero">
         <h1>Build. Market. Create.</h1>
         <p>Select the services you need below to generate a custom quote request.</p>
+        <p style="font-size: 0.9rem; color: var(--accent); margin-top: 10px;" id="location-text">Detecting currency...</p>
     </header>
 
     <div class="container">
         <h2 class="section-title">Our Services</h2>
         
         <div class="grid">
-            <div class="card" onclick="toggleService(this, 1500, 'Standard Website Build')">
+            <div class="card" onclick="toggleService(this, 'Standard Website Build')" data-usd="1500">
                 <h3>Standard Website</h3>
                 <p>5-page responsive website, SEO ready, contact forms included.</p>
                 <div class="price">$1,500 <span>/ project</span></div>
             </div>
 
-            <div class="card" onclick="toggleService(this, 2500, 'E-Commerce Website')">
+            <div class="card" onclick="toggleService(this, 'E-Commerce Website')" data-usd="2500">
                 <h3>E-Commerce Store</h3>
                 <p>Full online store, payment integration, product setup.</p>
                 <div class="price">$2,500 <span>/ project</span></div>
             </div>
 
-            <div class="card" onclick="toggleService(this, 200, 'Website Maintenance')">
+            <div class="card" onclick="toggleService(this, 'Website Maintenance')" data-usd="200">
                 <h3>Web Maintenance</h3>
                 <p>Monthly updates, security checks, and minor content edits.</p>
                 <div class="price">$200 <span>/ month</span></div>
             </div>
 
-            <div class="card" onclick="toggleService(this, 800, 'Social Media Marketing')">
+            <div class="card" onclick="toggleService(this, 'Social Media Marketing')" data-usd="800">
                 <h3>Social Media Mgmt</h3>
                 <p>12 posts/month, community engagement, monthly report.</p>
                 <div class="price">$800 <span>/ month</span></div>
             </div>
 
-            <div class="card" onclick="toggleService(this, 1200, 'Paid Ads Campaign')">
+            <div class="card" onclick="toggleService(this, 'Paid Ads Campaign')" data-usd="1200">
                 <h3>Paid Ad Campaign</h3>
                 <p>Google or Meta ads setup, A/B testing, and optimization.</p>
                 <div class="price">$1,200 <span>/ month</span></div>
             </div>
 
-            <div class="card" onclick="toggleService(this, 400, 'Photography Session')">
+            <div class="card" onclick="toggleService(this, 'Photography Session')" data-usd="400">
                 <h3>Photography</h3>
                 <p>2-hour brand or product photoshoot + professional editing.</p>
                 <div class="price">$400 <span>/ session</span></div>
             </div>
 
-            <div class="card" onclick="toggleService(this, 300, 'Video Editing')">
+            <div class="card" onclick="toggleService(this, 'Video Editing')" data-usd="300">
                 <h3>Video Editing</h3>
                 <p>Professional cutting, color grading, and sound design (per min).</p>
                 <div class="price">$300 <span>/ video</span></div>
@@ -167,34 +155,92 @@
 
     <div class="summary-bar" id="summaryBar">
         <div class="total-display">
-            Estimated Total: <span class="total-amount" id="totalPrice">$0</span>
+            Estimated Total: <span class="total-amount" id="totalPrice">0</span>
         </div>
         <button class="btn-request" onclick="sendRequest()">Proceed to Request</button>
     </div>
 
     <script>
+        // Default settings (USD)
+        let currentCurrency = "$";
+        let currentRate = 1;
         let total = 0;
         let selectedServices = [];
 
-        function toggleService(cardElement, price, name) {
+        // 1. EXCHANGE RATES (You can adjust these numbers)
+        const rates = {
+            "ZA": { code: "ZAR", symbol: "R", rate: 19 },   // South Africa (approx 19 Rand to 1 USD)
+            "GB": { code: "GBP", symbol: "£", rate: 0.79 }, // UK
+            "EU": { code: "EUR", symbol: "€", rate: 0.92 }, // Europe
+            "CA": { code: "CAD", symbol: "C$", rate: 1.35 } // Canada
+        };
+
+        // 2. DETECT LOCATION
+        fetch('https://ipapi.co/json/')
+            .then(response => response.json())
+            .then(data => {
+                const country = data.country_code; // e.g., "ZA", "US", "GB"
+                
+                // If we have a rate for this country, switch to it
+                if (rates[country]) {
+                    currentCurrency = rates[country].symbol;
+                    currentRate = rates[country].rate;
+                    document.getElementById('location-text').innerText = `Pricing converted to ${rates[country].code} for ${data.country_name}`;
+                } else {
+                    document.getElementById('location-text').innerText = `Pricing in USD (International)`;
+                }
+
+                updatePricesOnPage();
+            })
+            .catch(error => {
+                console.log("Could not detect location, defaulting to USD");
+                document.getElementById('location-text').innerText = "";
+            });
+
+        // 3. UPDATE PRICES VISUALLY
+        function updatePricesOnPage() {
+            const cards = document.querySelectorAll('.card');
+            
+            cards.forEach(card => {
+                const basePrice = parseInt(card.getAttribute('data-usd'));
+                const localPrice = Math.round(basePrice * currentRate).toLocaleString();
+                
+                // Update the visible text inside the card
+                const priceDiv = card.querySelector('.price');
+                // Keep the "span" part (/ month etc) intact
+                const spanText = priceDiv.querySelector('span').innerText;
+                priceDiv.innerHTML = `${currentCurrency}${localPrice} <span>${spanText}</span>`;
+            });
+        }
+
+        // 4. HANDLE CLICKS
+        function toggleService(cardElement, name) {
+            // Get price from the data attribute
+            const baseUsdPrice = parseInt(cardElement.getAttribute('data-usd'));
+            
+            // Calculate current local price
+            const localPrice = Math.round(baseUsdPrice * currentRate);
+
             cardElement.classList.toggle('selected');
 
             if (cardElement.classList.contains('selected')) {
-                total += price;
+                total += localPrice;
                 selectedServices.push(name);
             } else {
-                total -= price;
+                total -= localPrice;
                 const index = selectedServices.indexOf(name);
                 if (index > -1) selectedServices.splice(index, 1);
             }
 
-            document.getElementById('totalPrice').innerText = '$' + total.toLocaleString();
+            // Update Total Bar
+            document.getElementById('totalPrice').innerText = currentCurrency + total.toLocaleString();
             
             const bar = document.getElementById('summaryBar');
             if (total > 0) bar.classList.add('active');
             else bar.classList.remove('active');
         }
 
+        // 5. SEND EMAIL
         function sendRequest() {
             if(selectedServices.length === 0) return;
             let clientName = prompt("Please enter your Name/Company Name:");
@@ -202,9 +248,9 @@
                 const subject = encodeURIComponent(`Service Request from ${clientName}`);
                 const bodyContent = `Hi Trendora Media,\n\nI am interested in:\n` + 
                                     selectedServices.map(s => `- ${s}`).join('\n') + 
-                                    `\n\nTotal: $${total.toLocaleString()}\n\nBest,\n${clientName}`;
+                                    `\n\nTotal Estimated: ${currentCurrency}${total.toLocaleString()}\n\nBest,\n${clientName}`;
                 
-                // IMPORTANT: Change this email to yours
+                // IMPORTANT: CHANGE THIS EMAIL
                 const myEmail = "vntshikosi@gmail.com"; 
                 
                 window.location.href = `mailto:${myEmail}?subject=${subject}&body=${encodeURIComponent(bodyContent)}`;
