@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trendora Media | Service Selector</title>
+    <title>Trendora Media</title>
     
     <link rel="stylesheet" href="style.css">
 </head>
@@ -11,7 +11,7 @@
 
     <nav>
         <div class="logo-container">
-            <img src="logo.jpg" alt="Trendora Logo" class="logo-img">
+            <img src="logo.jpg" alt="Trendora Logo" class="logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
             <span class="brand-name">Trendora Media</span>
         </div>
     </nav>
@@ -81,62 +81,37 @@
         let selectedServices = [];
 
         function toggleService(cardElement, price, name) {
-            // Toggle Visuals
             cardElement.classList.toggle('selected');
 
-            // Check if selected or deselected
             if (cardElement.classList.contains('selected')) {
-                // Add to total
                 total += price;
                 selectedServices.push(name);
             } else {
-                // Subtract from total
                 total -= price;
-                // Remove from array
                 const index = selectedServices.indexOf(name);
-                if (index > -1) {
-                    selectedServices.splice(index, 1);
-                }
+                if (index > -1) selectedServices.splice(index, 1);
             }
 
-            // Update UI
             document.getElementById('totalPrice').innerText = '$' + total.toLocaleString();
             
-            // Show/Hide Bottom Bar
             const bar = document.getElementById('summaryBar');
-            if (total > 0) {
-                bar.classList.add('active');
-            } else {
-                bar.classList.remove('active');
-            }
+            if (total > 0) bar.classList.add('active');
+            else bar.classList.remove('active');
         }
 
         function sendRequest() {
             if(selectedServices.length === 0) return;
-
-            // 1. Get client details
             let clientName = prompt("Please enter your Name/Company Name:");
-            
             if (clientName) {
-                // 2. Format the email body
                 const subject = encodeURIComponent(`Service Request from ${clientName}`);
-                
-                const bodyContent = `Hi Trendora Media,\n\nI am interested in the following services:\n\n` + 
+                const bodyContent = `Hi Trendora Media,\n\nI am interested in:\n` + 
                                     selectedServices.map(s => `- ${s}`).join('\n') + 
-                                    `\n\nEstimated Budget: $${total.toLocaleString()}\n\n` +
-                                    `Please contact me to discuss details.\n\nBest,\n${clientName}`;
-                
-                const body = encodeURIComponent(bodyContent);
-
-                // 3. Your Email Address Here
+                                    `\n\nTotal: $${total.toLocaleString()}\n\nBest,\n${clientName}`;
+                // REPLACE THIS WITH YOUR EMAIL
                 const myEmail = "vntshikosi@gmail.com"; 
-
-                // 4. Open Email Client
-                window.location.href = `mailto:${myEmail}?subject=${subject}&body=${body}`;
+                window.location.href = `mailto:${myEmail}?subject=${subject}&body=${encodeURIComponent(bodyContent)}`;
             }
         }
     </script>
-
 </body>
 </html>
-
