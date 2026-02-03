@@ -3,258 +3,257 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trendora Media | Service Selector</title>
+    <title>Trendora Media | Premium Marketing & Creative</title>
     <style>
-        /* --- CSS STYLES --- */
         :root {
-            --bg-dark: #0f1420;
-            --bg-card: #1a2639;
-            --accent: #4a90e2;
-            --silver: #e0e6ed;
+            --bg-dark: #060912;
+            --glass: rgba(26, 38, 57, 0.7);
+            --accent: #4a90e2; /* Trendora Blue */
+            --silver: #cbd5e0;
             --white: #ffffff;
+            --whatsapp: #25d366;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
             margin: 0;
             background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(74, 144, 226, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(74, 144, 226, 0.1) 0%, transparent 40%);
             color: var(--silver);
             line-height: 1.6;
         }
 
+        /* Nav & Branding */
         nav {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            padding: 1.5rem 5%;
-            background: rgba(15, 20, 32, 0.95);
-            border-bottom: 1px solid #2c3e50;
+            padding: 1rem 5%;
+            background: rgba(6, 9, 18, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
             position: sticky; top: 0; z-index: 1000;
         }
+        .logo-container { display: flex; align-items: center; gap: 12px; }
+        .logo-img { height: 45px; width: auto; border-radius: 5px; }
+        .brand-name { font-size: 1.4rem; font-weight: 800; color: var(--white); letter-spacing: -0.5px; }
 
-        .logo-container { display: flex; align-items: center; gap: 15px; }
-        .logo-img { height: 50px; width: auto; display: block; }
-        .brand-name { font-size: 1.5rem; font-weight: 700; color: var(--white); text-transform: uppercase; }
-
+        /* Hero */
         .hero {
             text-align: center;
-            padding: 4rem 20px;
-            background: radial-gradient(circle at center, #233550 0%, var(--bg-dark) 70%);
+            padding: 6rem 20px;
         }
-        .hero h1 { font-size: 2.5rem; color: var(--white); margin-bottom: 10px; }
+        .hero h1 { 
+            font-size: clamp(2.5rem, 5vw, 4rem); 
+            color: var(--white); 
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, #fff, #4a90e2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero p { max-width: 650px; margin: 0 auto; font-size: 1.1rem; opacity: 0.8; }
 
-        .container { max-width: 1200px; margin: 0 auto; padding: 2rem 20px; }
-        .section-title { text-align: center; margin-bottom: 3rem; color: var(--accent); }
-
+        /* Service Cards */
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px 100px 20px; }
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 25px;
         }
-
         .card {
-            background: var(--bg-card);
-            border: 1px solid #2c3e50;
-            border-radius: 12px;
-            padding: 25px;
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 30px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-
-        .card:hover { transform: translateY(-5px); border-color: var(--accent); }
-        .card.selected { border: 2px solid var(--accent); background: #1e2f46; }
-        .card.selected::after {
-            content: "✓ Selected";
-            position: absolute; top: -10px; right: 20px;
-            background: var(--accent); color: white;
-            padding: 4px 12px; border-radius: 20px; font-size: 0.8rem;
+        .card:hover { 
+            transform: scale(1.02); 
+            border-color: var(--accent);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
         }
+        .card.selected { 
+            background: rgba(74, 144, 226, 0.15);
+            border: 2px solid var(--accent);
+        }
+        .card h3 { color: var(--white); margin-top: 0; font-size: 1.5rem; }
+        .price { font-size: 2rem; color: var(--accent); font-weight: 800; margin: 20px 0; }
+        .price span { font-size: 0.9rem; color: #718096; font-weight: 400; }
 
-        .price { font-size: 1.8rem; color: var(--white); font-weight: bold; margin: 15px 0; }
-        .price span { font-size: 1rem; color: #888; font-weight: normal; }
-
+        /* Bottom Action Bar */
         .summary-bar {
             position: fixed; bottom: 0; left: 0; width: 100%;
-            background: #1a2639; border-top: 1px solid var(--accent);
-            padding: 15px 5%; display: flex; justify-content: space-between; align-items: center;
-            transform: translateY(100%); transition: transform 0.3s ease-in-out;
+            background: rgba(15, 20, 32, 0.95);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid var(--accent);
+            padding: 20px 5%;
+            display: flex; justify-content: space-between; align-items: center;
+            transform: translateY(100%); transition: 0.5s ease;
             box-sizing: border-box; z-index: 2000;
         }
         .summary-bar.active { transform: translateY(0); }
-        .total-amount { font-weight: bold; color: var(--accent); font-size: 1.5rem; }
+        .total-info { display: flex; flex-direction: column; }
+        .total-amount { font-size: 1.8rem; font-weight: 800; color: var(--white); }
 
-        .btn-request {
-            background: var(--accent); color: white; border: none;
-            padding: 12px 30px; border-radius: 6px; font-weight: bold; cursor: pointer;
+        .btn-group { display: flex; gap: 15px; }
+        .btn {
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            display: flex; align-items: center; gap: 8px;
+            transition: 0.3s;
+            text-decoration: none;
         }
-        .btn-request:hover { background: #357abd; }
+        .btn-email { background: var(--white); color: var(--bg-dark); }
+        .btn-whatsapp { background: var(--whatsapp); color: white; }
+        .btn:hover { opacity: 0.9; transform: translateY(-2px); }
+
+        @media (max-width: 768px) {
+            .summary-bar { flex-direction: column; gap: 20px; text-align: center; }
+            .btn-group { width: 100%; }
+            .btn { flex: 1; justify-content: center; }
+        }
     </style>
 </head>
 <body>
 
     <nav>
         <div class="logo-container">
-            <img src="logo.jpg" alt="Trendora Logo" class="logo-img" onerror="this.style.display='none'">
+            <img src="logo.jpg" alt="Trendora" class="logo-img" onerror="this.style.display='none'">
             <span class="brand-name">Trendora Media</span>
         </div>
     </nav>
 
     <header class="hero">
-        <h1>Build. Market. Create.</h1>
-        <p>Select the services you need below to generate a custom quote request.</p>
-        <p style="font-size: 0.9rem; color: var(--accent); margin-top: 10px;" id="location-text">Detecting currency...</p>
+        <h1>Elevate Your Digital Presence</h1>
+        <p>Customized marketing and creative solutions for the modern brand. Select your requirements below.</p>
+        <p id="location-text" style="color: var(--accent); margin-top: 15px; font-weight: 600;"></p>
     </header>
 
     <div class="container">
-        <h2 class="section-title">Our Services</h2>
-        
         <div class="grid">
-            <div class="card" onclick="toggleService(this, 'Standard Website Build')" data-usd="1500">
+            <div class="card" onclick="toggleService(this, 'Standard Website Build')" data-zar="12500">
                 <h3>Standard Website</h3>
-                <p>5-page responsive website, SEO ready, contact forms included.</p>
-                <div class="price">$1,500 <span>/ project</span></div>
+                <p>Clean, high-converting 5-page site. Mobile optimized & SEO ready.</p>
+                <div class="price">R12,500 <span>once-off</span></div>
             </div>
 
-            <div class="card" onclick="toggleService(this, 'E-Commerce Website')" data-usd="2500">
+            <div class="card" onclick="toggleService(this, 'E-Commerce Store')" data-zar="22000">
                 <h3>E-Commerce Store</h3>
-                <p>Full online store, payment integration, product setup.</p>
-                <div class="price">$2,500 <span>/ project</span></div>
+                <p>Full online shop with payment gateway integration (PayFast/Yoco).</p>
+                <div class="price">R22,000 <span>once-off</span></div>
             </div>
 
-            <div class="card" onclick="toggleService(this, 'Website Maintenance')" data-usd="200">
-                <h3>Web Maintenance</h3>
-                <p>Monthly updates, security checks, and minor content edits.</p>
-                <div class="price">$200 <span>/ month</span></div>
+            <div class="card" onclick="toggleService(this, 'Social Media Management')" data-zar="6500">
+                <h3>Social Media Management</h3>
+                <p>Content creation, scheduling, and engagement (12 posts/month).</p>
+                <div class="price">R6,500 <span>/ month</span></div>
             </div>
 
-            <div class="card" onclick="toggleService(this, 'Social Media Marketing')" data-usd="800">
-                <h3>Social Media Mgmt</h3>
-                <p>12 posts/month, community engagement, monthly report.</p>
-                <div class="price">$800 <span>/ month</span></div>
+            <div class="card" onclick="toggleService(this, 'Brand Photography')" data-zar="3500">
+                <h3>Brand Photography</h3>
+                <p>Professional shoot, 20 high-res edited images for your brand.</p>
+                <div class="price">R3,500 <span>/ session</span></div>
             </div>
 
-            <div class="card" onclick="toggleService(this, 'Paid Ads Campaign')" data-usd="1200">
-                <h3>Paid Ad Campaign</h3>
-                <p>Google or Meta ads setup, A/B testing, and optimization.</p>
-                <div class="price">$1,200 <span>/ month</span></div>
-            </div>
-
-            <div class="card" onclick="toggleService(this, 'Photography Session')" data-usd="400">
-                <h3>Photography</h3>
-                <p>2-hour brand or product photoshoot + professional editing.</p>
-                <div class="price">$400 <span>/ session</span></div>
-            </div>
-
-            <div class="card" onclick="toggleService(this, 'Video Editing')" data-usd="300">
+            <div class="card" onclick="toggleService(this, 'Professional Video Editing')" data-zar="2500">
                 <h3>Video Editing</h3>
-                <p>Professional cutting, color grading, and sound design (per min).</p>
-                <div class="price">$300 <span>/ video</span></div>
+                <p>Reels, TikToks, or YouTube ads. Cutting, color, and sound.</p>
+                <div class="price">R2,500 <span>/ video</span></div>
+            </div>
+
+            <div class="card" onclick="toggleService(this, 'Website Maintenance')" data-zar="1200">
+                <h3>Web Maintenance</h3>
+                <p>Security updates, backups, and minor text/image changes.</p>
+                <div class="price">R1,200 <span>/ month</span></div>
             </div>
         </div>
     </div>
 
     <div class="summary-bar" id="summaryBar">
-        <div class="total-display">
-            Estimated Total: <span class="total-amount" id="totalPrice">0</span>
+        <div class="total-info">
+            <span style="font-size: 0.9rem; opacity: 0.7;">Estimated Total:</span>
+            <span class="total-amount" id="totalPrice">R0</span>
         </div>
-        <button class="btn-request" onclick="sendRequest()">Proceed to Request</button>
+        <div class="btn-group">
+            <button class="btn btn-whatsapp" onclick="sendWhatsApp()">WhatsApp Us</button>
+            <button class="btn btn-email" onclick="sendEmail()">Email Brief</button>
+        </div>
     </div>
 
     <script>
-        // Default settings (USD)
-        let currentCurrency = "$";
-        let currentRate = 1;
         let total = 0;
         let selectedServices = [];
+        let currencySymbol = "R";
+        let conversionRate = 1;
 
-        // 1. EXCHANGE RATES (You can adjust these numbers)
-        const rates = {
-            "ZA": { code: "ZAR", symbol: "R", rate: 19 },   // South Africa (approx 19 Rand to 1 USD)
-            "GB": { code: "GBP", symbol: "£", rate: 0.79 }, // UK
-            "EU": { code: "EUR", symbol: "€", rate: 0.92 }, // Europe
-            "CA": { code: "CAD", symbol: "C$", rate: 1.35 } // Canada
-        };
-
-        // 2. DETECT LOCATION
+        // Auto-Currency (ZAR base)
         fetch('https://ipapi.co/json/')
-            .then(response => response.json())
+            .then(res => res.json())
             .then(data => {
-                const country = data.country_code; // e.g., "ZA", "US", "GB"
-                
-                // If we have a rate for this country, switch to it
-                if (rates[country]) {
-                    currentCurrency = rates[country].symbol;
-                    currentRate = rates[country].rate;
-                    document.getElementById('location-text').innerText = `Pricing converted to ${rates[country].code} for ${data.country_name}`;
+                const loc = document.getElementById('location-text');
+                if (data.country_code !== 'ZA') {
+                    // Convert ZAR to USD if not in South Africa
+                    currencySymbol = "$";
+                    conversionRate = 0.053; // Current approx R1 to $0.053
+                    loc.innerText = "International visitor detected. Pricing adjusted to USD.";
+                    updatePrices();
                 } else {
-                    document.getElementById('location-text').innerText = `Pricing in USD (International)`;
+                    loc.innerText = "South African Partner Rates Applied (ZAR)";
                 }
-
-                updatePricesOnPage();
-            })
-            .catch(error => {
-                console.log("Could not detect location, defaulting to USD");
-                document.getElementById('location-text').innerText = "";
             });
 
-        // 3. UPDATE PRICES VISUALLY
-        function updatePricesOnPage() {
-            const cards = document.querySelectorAll('.card');
-            
-            cards.forEach(card => {
-                const basePrice = parseInt(card.getAttribute('data-usd'));
-                const localPrice = Math.round(basePrice * currentRate).toLocaleString();
-                
-                // Update the visible text inside the card
-                const priceDiv = card.querySelector('.price');
-                // Keep the "span" part (/ month etc) intact
-                const spanText = priceDiv.querySelector('span').innerText;
-                priceDiv.innerHTML = `${currentCurrency}${localPrice} <span>${spanText}</span>`;
+        function updatePrices() {
+            document.querySelectorAll('.card').forEach(card => {
+                const base = card.getAttribute('data-zar');
+                const local = Math.round(base * conversionRate).toLocaleString();
+                const spanText = card.querySelector('.price span').innerText;
+                card.querySelector('.price').innerHTML = `${currencySymbol}${local} <span>${spanText}</span>`;
             });
         }
 
-        // 4. HANDLE CLICKS
-        function toggleService(cardElement, name) {
-            // Get price from the data attribute
-            const baseUsdPrice = parseInt(cardElement.getAttribute('data-usd'));
-            
-            // Calculate current local price
-            const localPrice = Math.round(baseUsdPrice * currentRate);
-
-            cardElement.classList.toggle('selected');
-
-            if (cardElement.classList.contains('selected')) {
-                total += localPrice;
+        function toggleService(card, name) {
+            const price = Math.round(card.getAttribute('data-zar') * conversionRate);
+            card.classList.toggle('selected');
+            if (card.classList.contains('selected')) {
+                total += price;
                 selectedServices.push(name);
             } else {
-                total -= localPrice;
-                const index = selectedServices.indexOf(name);
-                if (index > -1) selectedServices.splice(index, 1);
+                total -= price;
+                selectedServices = selectedServices.filter(s => s !== name);
             }
-
-            // Update Total Bar
-            document.getElementById('totalPrice').innerText = currentCurrency + total.toLocaleString();
-            
-            const bar = document.getElementById('summaryBar');
-            if (total > 0) bar.classList.add('active');
-            else bar.classList.remove('active');
+            document.getElementById('totalPrice').innerText = currencySymbol + total.toLocaleString();
+            document.getElementById('summaryBar').classList.toggle('active', total > 0);
         }
 
-        // 5. SEND EMAIL
-        function sendRequest() {
-            if(selectedServices.length === 0) return;
-            let clientName = prompt("Please enter your Name/Company Name:");
-            if (clientName) {
-                const subject = encodeURIComponent(`Service Request from ${clientName}`);
-                const bodyContent = `Hi Trendora Media,\n\nI am interested in:\n` + 
-                                    selectedServices.map(s => `- ${s}`).join('\n') + 
-                                    `\n\nTotal Estimated: ${currentCurrency}${total.toLocaleString()}\n\nBest,\n${clientName}`;
-                
-                // IMPORTANT: CHANGE THIS EMAIL
-                const myEmail = "vntshikosi@gmail.com"; 
-                
-                window.location.href = `mailto:${myEmail}?subject=${subject}&body=${encodeURIComponent(bodyContent)}`;
-            }
+        function generateMessage(clientName) {
+            return `OFFICIAL PROJECT BRIEF - TRENDORA MEDIA\n\n` +
+                   `Client/Company: ${clientName}\n` +
+                   `Requested Services:\n${selectedServices.map(s => `• ${s}`).join('\n')}\n\n` +
+                   `Total Estimated Quote: ${currencySymbol}${total.toLocaleString()}\n\n` +
+                   `Please contact me to finalize the project timeline.`;
+        }
+
+        function sendEmail() {
+            const name = prompt("Please enter your name or company name:");
+            if (!name) return;
+            const myEmail = "vntshikosi@gmail.com"; // CHANGE THIS
+            const subject = `New Project Inquiry: ${name}`;
+            window.location.href = `mailto:${myEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(generateMessage(name))}`;
+        }
+
+        function sendWhatsApp() {
+            const name = prompt("Please enter your name or company name:");
+            if (!name) return;
+            const phone = "27614626618"; // CHANGE THIS (Use format 27 for South Africa)
+            const url = `https://wa.me/${phone}?text=${encodeURIComponent(generateMessage(name))}`;
+            window.open(url, '_blank');
         }
     </script>
 </body>
