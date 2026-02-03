@@ -1,66 +1,40 @@
 :root {
-    /* Colors pulled from your Logo */
-    --bg-dark: #0f1420;  /* Very dark navy */
-    --bg-card: #1a2639;  /* Slightly lighter navy */
-    --accent: #4a90e2;   /* The blue swirl color */
-    --silver: #e0e6ed;   /* Text color */
+    --bg-dark: #0f1420;
+    --bg-card: #1a2639;
+    --accent: #4a90e2;
+    --silver: #e0e6ed;
     --white: #ffffff;
-    --success: #2ecc71;
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: sans-serif;
     margin: 0;
     background-color: var(--bg-dark);
     color: var(--silver);
     line-height: 1.6;
 }
 
-/* Navigation */
 nav {
     display: flex;
-    justify-content: space-between;
     align-items: center;
     padding: 1.5rem 5%;
     background: rgba(15, 20, 32, 0.95);
     border-bottom: 1px solid #2c3e50;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
+    position: sticky; top: 0; z-index: 1000;
 }
 
-.logo-container {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
+.logo-container { display: flex; align-items: center; gap: 15px; }
+.logo-img { height: 50px; width: auto; display: block; }
+.brand-name { font-size: 1.5rem; font-weight: 700; color: var(--white); text-transform: uppercase; }
 
-.logo-img {
-    height: 50px; 
-    width: auto;
-}
-
-.brand-name {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--white);
-    letter-spacing: 1px;
-    text-transform: uppercase;
-}
-
-/* Hero Section */
 .hero {
     text-align: center;
     padding: 4rem 20px;
     background: radial-gradient(circle at center, #233550 0%, var(--bg-dark) 70%);
 }
-
 .hero h1 { font-size: 2.5rem; color: var(--white); margin-bottom: 10px; }
-.hero p { max-width: 600px; margin: 0 auto; color: #a0aab5; }
 
-/* Service Grid */
 .container { max-width: 1200px; margin: 0 auto; padding: 2rem 20px; }
-
 .section-title { text-align: center; margin-bottom: 3rem; color: var(--accent); }
 
 .grid {
@@ -69,7 +43,6 @@ nav {
     gap: 25px;
 }
 
-/* Service Cards */
 .card {
     background: var(--bg-card);
     border: 1px solid #2c3e50;
@@ -78,79 +51,33 @@ nav {
     cursor: pointer;
     transition: all 0.3s ease;
     position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
 }
 
-.card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-    border-color: var(--accent);
-}
+.card:hover { transform: translateY(-5px); border-color: var(--accent); }
 
-/* Selected State for Cards */
-.card.selected {
-    border: 2px solid var(--accent);
-    background: #1e2f46;
-}
-
+.card.selected { border: 2px solid var(--accent); background: #1e2f46; }
 .card.selected::after {
     content: "✓ Selected";
-    position: absolute;
-    top: -10px;
-    right: 20px;
-    background: var(--accent);
-    color: white;
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: bold;
+    position: absolute; top: -10px; right: 20px;
+    background: var(--accent); color: white;
+    padding: 4px 12px; border-radius: 20px; font-size: 0.8rem;
 }
 
-.price {
-    font-size: 1.8rem;
-    color: var(--white);
-    font-weight: bold;
-    margin: 15px 0;
-}
-
+.price { font-size: 1.8rem; color: var(--white); font-weight: bold; margin: 15px 0; }
 .price span { font-size: 1rem; color: #888; font-weight: normal; }
 
-/* Summary Bar (Sticky Bottom) */
 .summary-bar {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background: #1a2639;
-    border-top: 1px solid var(--accent);
-    padding: 15px 5%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
-    z-index: 2000;
-    transform: translateY(100%); /* Hidden by default */
-    transition: transform 0.3s ease-in-out;
-    box-sizing: border-box;
+    position: fixed; bottom: 0; left: 0; width: 100%;
+    background: #1a2639; border-top: 1px solid var(--accent);
+    padding: 15px 5%; display: flex; justify-content: space-between; align-items: center;
+    transform: translateY(100%); transition: transform 0.3s ease-in-out;
+    box-sizing: border-box; z-index: 2000;
 }
-
 .summary-bar.active { transform: translateY(0); }
-
-.total-display { font-size: 1.2rem; }
 .total-amount { font-weight: bold; color: var(--accent); font-size: 1.5rem; }
 
 .btn-request {
-    background: var(--accent);
-    color: white;
-    border: none;
-    padding: 12px 30px;
-    border-radius: 6px;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background 0.2s;
+    background: var(--accent); color: white; border: none;
+    padding: 12px 30px; border-radius: 6px; font-weight: bold; cursor: pointer;
 }
-
 .btn-request:hover { background: #357abd; }
