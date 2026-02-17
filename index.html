@@ -2,6 +2,10 @@
 <html lang="en">
 <head>
 
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://ipapi.co; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src https://ipapi.co;">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
@@ -114,24 +118,33 @@
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 25px;
         }
-        .card {
-            background: var(--glass);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 20px;
-            padding: 30px;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        .card:hover { 
-            transform: scale(1.02); 
-            border-color: var(--accent);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-        }
-        .card.selected { 
-            background: rgba(74, 144, 226, 0.15);
-            border: 2px solid var(--accent);
-        }
+        /* Update your .card class with these properties */
+.card {
+    background: rgba(255, 255, 255, 0.03); /* Lighter glass */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px); /* Safari support */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px; /* Softer corners */
+    padding: 32px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Add a subtle glow on hover */
+.card:hover {
+    background: rgba(255, 255, 255, 0.07);
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5), 
+                0 0 20px rgba(74, 144, 226, 0.2);
+}
+
+/* Animated gradient border for the selected state */
+.card.selected {
+    border: 2px solid var(--accent);
+    background: rgba(74, 144, 226, 0.08);
+    box-shadow: 0 0 25px rgba(74, 144, 226, 0.3);
+}
         .card h3 { color: var(--white); margin-top: 0; font-size: 1.5rem; }
         .price { font-size: 2rem; color: var(--accent); font-weight: 800; margin: 20px 0; }
         .price span { font-size: 0.9rem; color: #718096; font-weight: 400; }
@@ -172,6 +185,7 @@
             .btn { flex: 1; justify-content: center; }
         }
     </style>
+    
 </head>
 <body>
 
@@ -270,27 +284,50 @@
             });
         }
 
-        function toggleService(card, name) {
-            const price = Math.round(card.getAttribute('data-zar') * conversionRate);
-            card.classList.toggle('selected');
-            if (card.classList.contains('selected')) {
-                total += price;
-                selectedServices.push(name);
-            } else {
-                total -= price;
-                selectedServices = selectedServices.filter(s => s !== name);
-            }
-            document.getElementById('totalPrice').innerText = currencySymbol + total.toLocaleString();
-            document.getElementById('summaryBar').classList.toggle('active', total > 0);
-        }
+       function toggleService(card, name) {
+    // This extracts the FIRST number from the string (e.g., 6500 from "6500 - 35000")
+    const priceString = card.getAttribute('data-zar');
+    const basePrice = parseInt(priceString.split(' ')[0].replace(/,/g, ''));
+    
+    const price = Math.round(basePrice * conversionRate);
+    
+    card.classList.toggle('selected');
+    
+    if (card.classList.contains('selected')) {
+        total += price;
+        selectedServices.push(name);
+    } else {
+        total -= price;
+        selectedServices = selectedServices.filter(s => s !== name);
+    }
+    
+    document.getElementById('totalPrice').innerText = currencySymbol + total.toLocaleString();
+    
+    // Smooth show/hide logic
+    const bar = document.getElementById('summaryBar');
+    if (total > 0) {
+        bar.classList.add('active');
+    } else {
+        bar.classList.remove('active');
+    }
+}
 
-        function generateMessage(clientName) {
-            return `OFFICIAL PROJECT BRIEF - TRENDORA MEDIA\n\n` +
-                   `Client/Company: ${clientName}\n` +
-                   `Requested Services:\n${selectedServices.map(s => `• ${s}`).join('\n')}\n\n` +
-                   `Total Estimated Quote: ${currencySymbol}${total.toLocaleString()}\n\n` +
-                   `Please contact me to finalize the project timeline.`;
-        }
+       function sanitizeInput(str) {
+    const temp = document.createElement('div');
+    temp.textContent = str;
+    return temp.innerHTML;
+}
+
+function generateMessage(clientName) {
+    // Clean the name before using it
+    const cleanName = sanitizeInput(clientName);
+    
+    return `OFFICIAL PROJECT BRIEF - TRENDORA MEDIA\n\n` +
+           `Client/Company: ${cleanName}\n` +
+           `Requested Services:\n${selectedServices.map(s => `• ${s}`).join('\n')}\n\n` +
+           `Total Estimated Quote: ${currencySymbol}${total.toLocaleString()}\n\n` +
+           `Please contact me to finalize the project timeline.`;
+}
 
         function sendEmail() {
             const name = prompt("Please enter your name or company name:");
@@ -301,12 +338,13 @@
         }
 
         function sendWhatsApp() {
-            const name = prompt("Please enter your name or company name:");
-            if (!name) return;
-            const phone = "27614626618"; // CHANGE THIS (Use format 27 for South Africa)
-            const url = `https://wa.me/${phone}?text=${encodeURIComponent(generateMessage(name))}`;
-            window.open(url, '_blank');
-        }
+    const name = prompt("Please enter your name:");
+    if (!name) return;
+    // This is '27614626618' encoded so bots can't read it easily
+    const p = atob("Mjc2MTQ2MjY2MTg="); 
+    const url = `https://wa.me/${p}?text=${encodeURIComponent(generateMessage(name))}`;
+    window.open(url, '_blank');
+}
     </script>
 </body>
 </html>
