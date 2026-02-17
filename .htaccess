@@ -1,0 +1,33 @@
+# 1. Prevent Directory Browsing (Stops hackers from seeing your file list)
+Options -Indexes
+
+# 2. Protect the .htaccess file itself
+<Files .htaccess>
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+# 3. Security Headers
+<IfModule mod_headers.c>
+    # Prevents Clickjacking (Stops people from putting your site in an <iframe>)
+    Header set X-Frame-Options "SAMEORIGIN"
+    
+    # Prevents XSS (Cross-Site Scripting)
+    Header set X-XSS-Protection "1; mode=block"
+    
+    # Stops browsers from "sniffing" the content type (Prevents script injection)
+    Header set X-Content-Type-Options "nosniff"
+    
+    # Forces HTTPS (Ensure you have an SSL certificate active)
+    Header set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+    
+    # Restricts where your site can send/receive data
+    Header set Content-Security-Policy "default-src 'self'; script-src 'self' https://ipapi.co; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src https://ipapi.co;"
+</IfModule>
+
+# 4. Block Malicious Script Injections (Common URL hacks)
+RewriteEngine On
+RewriteCond %{QUERY_STRING} (<|%3C).*script.*(>|%3E) [NC,OR]
+RewriteCond %{QUERY_STRING} GLOBALS(=|\[|\%[0-9A-Z]{0,2}) [OR]
+RewriteCond %{QUERY_STRING} _REQUEST(=|\[|\%[0-9A-Z]{0,2})
+RewriteRule ^(.*)$ index.php [F,L]
