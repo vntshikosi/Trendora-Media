@@ -184,6 +184,66 @@
             .btn-group { width: 100%; }
             .btn { flex: 1; justify-content: center; }
         }
+
+        /* --- Floating Contact Buttons --- */
+.floating-contact {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    z-index: 2001; /* Keeps them above your Summary Bar */
+}
+
+.float-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--white);
+    text-decoration: none;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+}
+
+/* Hover Animation */
+.float-btn:hover {
+    transform: scale(1.1) translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+}
+
+.wa-btn {
+    background-color: var(--whatsapp);
+}
+
+.wa-btn:hover {
+    background-color: #20b858;
+}
+
+.email-btn {
+    background-color: var(--accent);
+}
+
+.email-btn:hover {
+    background-color: #357abd;
+}
+
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+    .floating-contact {
+        /* Pushes the buttons up higher on mobile so your active summary bar doesn't cover them */
+        bottom: 120px; 
+        right: 20px;
+        gap: 12px;
+    }
+    .float-btn {
+        width: 55px;
+        height: 55px;
+    }
+}
     </style>
     
 </head>
